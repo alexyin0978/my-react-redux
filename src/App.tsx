@@ -2,9 +2,36 @@ import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
+import { Reducer, SubscribeFn, createStore } from "./redux";
+
+const initCount = 0;
+const countReducer = (currentState: number, action: { type: string }) => {
+  switch (action.type) {
+    case "increment": {
+      return 1 + currentState;
+    }
+    case "decrement": {
+      return currentState - 1;
+    }
+    default: {
+      return initCount;
+    }
+  }
+};
+
+const { dispatch, getState, subscribe } = createStore(countReducer as Reducer);
 
 function App() {
   const [count, setCount] = useState(0);
+  dispatch({ type: "increment" });
+  dispatch({ type: "increment" });
+  dispatch({ type: "increment" });
+  dispatch({ type: "decrement" });
+
+  const subscriber = () => {
+    console.log(getState());
+  };
+  subscribe(subscriber as SubscribeFn);
 
   return (
     <>
